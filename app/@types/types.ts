@@ -1,11 +1,11 @@
 type Provider = {
   id: string;
   tradeName: string;
-  openningDate: string; // data no formato ISO 8601
+  openningDate: string; // data no formato ISO 8601 ex: 2023-10-21
   taxRegime: "Isento" | "MicroempreendedorIndividual" | "SimplesNacional" | "LucroPresumido" | "LucroReal";
   specialTaxRegime: "Automatico" | "Nenhum" | "MicroempresaMunicipal" | "Estimativa" | "SociedadeDeProfissionais" | "Cooperativa" | "MicroempreendedorIndividual" | "MicroempresarioEmpresaPequenoPorte";
   legalNature: "EmpresaPublica" | "SociedadeEconomiaMista" | "SociedadeAnonimaAberta" | "SociedadeAnonimaFechada" | "SociedadeEmpresariaLimitada" | "SociedadeEmpresariaEmNomeColetivo" | "SociedadeEmpresariaEmComanditaSimples" | "SociedadeEmpresariaEmComanditaporAcoes" | "SociedadeemContaParticipacao" | "Empresario" | "Cooperativa" | "ConsorcioSociedades" | "GrupoSociedades" | "EmpresaDomiciliadaExterior" | "ClubeFundoInvestimento" | "SociedadeSimplesPura" | "SociedadeSimplesLimitada" | "SociedadeSimplesEmNomeColetivo" | "SociedadeSimplesEmComanditaSimples" | "EmpresaBinacional" | "ConsorcioEmpregadores" | "ConsorcioSimples" | "EireliNaturezaEmpresaria" | "EireliNaturezaSimples" | "ServicoNotarial" | "FundacaoPrivada" | "ServicoSocialAutonomo" | "CondominioEdilicio" | "ComissaoConciliacaoPrevia" | "EntidadeMediacaoArbitragem" | "PartidoPolitico" | "EntidadeSindical" | "EstabelecimentoBrasilFundacaoAssociacaoEstrangeiras" | "FundacaoAssociacaoDomiciliadaExterior" | "OrganizacaoReligiosa" | "ComunidadeIndigena" | "FundoPrivado" | "AssociacaoPrivada";
-  economicActivities: Array<{ type: "Atividades da Empresa"; code: number }>;
+  economicActivities: Array<{ type: "Main" | "Secondary"; code: number }>;
   companyRegistryNumber: number;
   regionalTaxNumber: number;
   municipalTaxNumber: string;
@@ -20,21 +20,18 @@ type Provider = {
   email: string;
   address: Address;
   status: "Active" | "Inactive" | "Suspended";
-  type: "Jurídica" | "Física";
+  type: "Undefined" | "NaturalPerson" | "LegalEntity" | "LegalPerson" | "Company" | "Customer";
   createdOn: string;
   modifiedOn: string;
 };
 
 type Borrower = {
+  parentId: string;
   id: string;
   name: string;
   federalTaxNumber: number;
   email: string;
   address: Address;
-  status: "Active" | "Inactive" | "Suspended";
-  type: "Jurídica" | "Física";
-  createdOn: string;
-  modifiedOn: string;
 };
 
 type Address = {
@@ -50,6 +47,7 @@ type Address = {
 type City = {
   code: string;
   name: string;
+  state: string;
 };
 
 type Location_t = {
