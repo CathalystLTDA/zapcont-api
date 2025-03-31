@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NfseBody } from '@/app/@types/types';
 import { NextRequest, NextResponse } from 'next/server';
 
