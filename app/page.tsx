@@ -39,7 +39,7 @@ export default function Home() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="font-bold text-4xl mb-8"
         >
-          Vercel + Neon Health Check
+          Seu João Status
         </motion.h1>
 
         {loading ? (

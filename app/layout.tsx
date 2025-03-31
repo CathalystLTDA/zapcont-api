@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Vercel + Neon",
-  description: "Use Neon with Vercel",
+  title: "Dashboard - Seu João (ZapCont)",
+  description: "Dashboard Visual de informações e dados da ZapCont/Seu João",
 };
 
 export default function RootLayout({
