@@ -1,21 +1,22 @@
-import { NfseBodySchema } from "@/app/types/nfse";
+import { ServiceSchema } from "@/app/types/nfse";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NFEIO_API_URL; // URL da API
 const API_KEY = process.env.NFEIO_API_KEY; // Chave da API
+
 export async function POST(req: NextRequest, context: { params: { company_id: string } }) {
   try {
-    const { searchParams } = new URL(req.url);
-    const companyId = searchParams.get("company_id");
+    // Pegando o company_id diretamente do context.params
+    const { company_id } = await context.params;
 
     const body = await req.json();
     
-    const parsedBody = NfseBodySchema.safeParse(body);
+    const parsedBody = ServiceSchema.safeParse(body);
     if (!parsedBody.success) {
       return NextResponse.json({ error: "Invalid request body", details: parsedBody.error.format() }, { status: 400 });
     }
 
-    const response = await fetch(`${API_URL}/companies/${companyId}/serviceinvoices`, {
+    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
