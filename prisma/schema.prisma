@@ -67,3 +67,11 @@ model UserInfo {
   updatedAt      DateTime @updatedAt
   user           User     @relation(fields: [userId], references: [id])
 }
+
+model WhatsappSession {
+  id        Int      @id @default(autoincrement())
+  sessionId String   @unique
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
