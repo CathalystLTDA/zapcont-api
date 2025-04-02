@@ -14,7 +14,65 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id             Int         @id @default(autoincrement())
+  idWhatsapp     String      @unique
+  messageCounter Int         @default(0)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  threadId       String
+  isSignedup     Boolean     @default(false)
+  isSubscribed   Boolean     @default(false)
+  plan           Int         @default(0)
+  messages       Message[]
+  Companies      Companies[]
+  userInfo       UserInfo?   @relation
+  userInfoId     Int?        @unique
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  content   String
+  role      String
+  counter   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Companies {
+  id           String   @id @default(cuid()) // Identificador único
+  cnpj         String   @unique // CNPJ da empresa
+  nomeFantasia String? // Nome fantasia da empresa
+  razaoSocial  String // Razão social da empresa
+  telefone     String? // Telefone de contato
+  email        String? // E-mail de contato
+  endereco     String? // Endereço da empresa
+  bairro       String?
+  cidade       String?
+  estado       String?
+  cep          String?
+  createdAt    DateTime @default(now()) // Data de criação do registro
+  updatedAt    DateTime @updatedAt // Atualizado automaticamente quando houver mudanças
+  userId       Int // ID do usuário associado
+  user         User     @relation(fields: [userId], references: [id]) // Relação com o modelo User
+}
+
+model UserInfo {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  cpf            String   @unique
+  dataNascimento DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  userId         Int      @unique
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model WhatsappSession {
+  id        Int      @id @default(autoincrement())
+  sessionId String   @unique
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
