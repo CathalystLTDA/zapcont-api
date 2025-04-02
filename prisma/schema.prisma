@@ -25,7 +25,8 @@ model User {
   plan           Int         @default(0)
   messages       Message[]
   Companies      Companies[]
-  UserInfo       UserInfo[]
+  userInfo       UserInfo?   @relation
+  userInfoId     Int?        @unique
 }
 
 model Message {
@@ -59,12 +60,12 @@ model Companies {
 
 model UserInfo {
   id             Int      @id @default(autoincrement())
-  userId         Int
   nome           String
   cpf            String   @unique
   dataNascimento DateTime
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  userId         Int      @unique
   user           User     @relation(fields: [userId], references: [id])
 }
 
