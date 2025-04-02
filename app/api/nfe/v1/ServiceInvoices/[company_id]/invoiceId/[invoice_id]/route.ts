@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const API_URL = process.env.NFEIO_V1_API_URL; // URL da API
 const API_KEY = process.env.NFEIO_API_KEY; // Chave da API
 
-export async function GET(req: NextRequest, context: { params: { company_id: string, invoice_id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ company_id: string, invoice_id: string }> }) {
   try {
     // Pegando o company_id diretamente do context.params
     const { company_id, invoice_id } = await context.params;
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest, context: { params: { company_id: str
 }
 
 // PUT - Enviar email da nota fiscal
-export async function PUT(req: NextRequest, context: { params: { company_id: string, invoice_id: string } }) {
+export async function PUT(req: NextRequest, context: { params: Promise<{ company_id: string, invoice_id: string }> }) {
   try {
     const { company_id, invoice_id } = await context.params;
     const body = await req.json();

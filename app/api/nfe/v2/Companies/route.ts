@@ -1,3 +1,4 @@
+
 import CompanyV2Schema from "@/app/types/company-v2";
 import { NextRequest, NextResponse } from "next/server";
 

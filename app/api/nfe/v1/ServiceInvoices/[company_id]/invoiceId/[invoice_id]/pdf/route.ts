@@ -5,7 +5,7 @@ const API_URL = process.env.NFEIO_V1_API_URL;
 const API_KEY = process.env.NFEIO_API_KEY;
 
 // GET - Obter PDF da nota fiscal
-export async function GET(req: NextRequest, context: { params: { company_id: string, invoice_id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ company_id: string, invoice_id: string } >}) {
   try {
     const { company_id, invoice_id } = await context.params;
 

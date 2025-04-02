@@ -1,7 +1,7 @@
 import { ServiceSchema } from "@/app/types/service";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_URL = process.env.NFEIO_V1_API_URL; // URL da API
+const API_URL = process.env.NFEIO_V2_API_URL; // URL da API
 const API_KEY = process.env.NFEIO_API_KEY; // Chave da API
 
 export async function POST(req: NextRequest, context: { params: Promise<{ company_id: string }> }) {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ compan
       return NextResponse.json({ error: "Invalid request body", details: parsedBody.error.format() }, { status: 400 });
     }
 
-    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices`, {
+    const response = await fetch(`${API_URL}/companies/${company_id}/productinvoices`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -41,9 +41,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ compan
 export async function GET(req: NextRequest, context: { params: Promise<{ company_id: string }> }) {
   try {
     const { company_id } = await context.params;
-    console.log("company_id", company_id);
 
-    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices`, {
+    const response = await fetch(`${API_URL}/companies/${company_id}/productinvoices`, {
       method: "GET",
       headers: {
         "Accept": "application/json",

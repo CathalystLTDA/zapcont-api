@@ -3,10 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 const API_URL = process.env.NFEIO_V1_API_URL;
 const API_KEY = process.env.NFEIO_API_KEY;
 
-export async function GET(req: NextRequest,  { params }: { params: { company_id: string } }) {                              
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ company_id: string }> }
+) {
   try {
-    const resolvedParams = await params;
-    const id = resolvedParams.company_id;
+    const id = (await params).company_id;
     
     if (!id) {
       return NextResponse.json({ error: "ID ou CNPJ da empresa é obrigatório" }, { status: 400 });
@@ -34,12 +36,10 @@ export async function GET(req: NextRequest,  { params }: { params: { company_id:
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { company_id: string } }
+  { params }: { params: Promise<{ company_id: string }> }
 ) {
   try {
-    // Await the entire params object first
-    const resolvedParams = await params;
-    const id = resolvedParams.company_id;
+    const id = (await params).company_id;
     
     if (!id) {
       return NextResponse.json({ error: "ID é obrigatório" }, { status: 400 });
@@ -73,11 +73,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { company_id: string } }
+  { params }: { params: Promise<{ company_id: string }> }
 ) {
   try {
-    // Get company ID from the URL path parameter
-    const id = await params.company_id;
+    const id = (await params).company_id;
     
     if (!id) {
       return NextResponse.json({ error: "ID é obrigatório" }, { status: 400 });
