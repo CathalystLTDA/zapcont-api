@@ -1,7 +1,7 @@
-import { CompanyV1Schema } from "@/app/types/company-v1";
+import CompanyV2Schema from "@/app/types/company-v2";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_URL = process.env.NFEIO_V1_API_URL;
+const API_URL = process.env.NFEIO_V2_API_URL;
 const API_KEY = process.env.NFEIO_API_KEY;
 
 export async function POST(req: NextRequest) {
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Valida os dados com Zod
-    const validation = CompanyV1Schema.safeParse(body);
+    const validation = CompanyV2Schema.safeParse(body);
 
     if (!validation.success) {
       // Extrai os erros de forma mais legível
