@@ -1,4 +1,4 @@
-import CompanyV2Schema from "@/app/types/company-v2";
+import CompanyV2Schema from "@/app/schemas/company-v2";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NFEIO_V2_API_URL;

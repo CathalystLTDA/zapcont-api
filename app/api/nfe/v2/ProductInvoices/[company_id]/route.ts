@@ -1,4 +1,4 @@
-import ProductInvoiceQueueIssueResource from "@/app/types/product";
+import ProductInvoiceQueueIssueResource from "@/app/schemas/product";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NFEIO_V2_API_URL; // URL da API

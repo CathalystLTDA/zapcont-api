@@ -1,4 +1,4 @@
-import { ServiceSchema } from "@/app/types/service";
+import { ServiceSchema } from "@/app/schemas/service";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NFEIO_V1_API_URL; // URL da API
