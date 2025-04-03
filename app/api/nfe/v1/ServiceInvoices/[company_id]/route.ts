@@ -41,7 +41,6 @@ export async function POST(req: NextRequest, context: { params: Promise<{ compan
 export async function GET(req: NextRequest, context: { params: Promise<{ company_id: string }> }) {
   try {
     const { company_id } = await context.params;
-    console.log("company_id", company_id);
 
     const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices`, {
       method: "GET",

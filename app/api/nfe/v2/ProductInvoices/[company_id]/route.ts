@@ -1,4 +1,4 @@
-import { ServiceSchema } from "@/app/types/service";
+import ProductInvoiceQueueIssueResource from "@/app/types/product";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NFEIO_V2_API_URL; // URL da API
@@ -9,9 +9,12 @@ export async function POST(req: NextRequest, context: { params: Promise<{ compan
     // Pegando o company_id diretamente do context.params
     const { company_id } = await context.params;
 
+
     const body = await req.json();
 
-    const parsedBody = ServiceSchema.safeParse(body);
+
+
+    const parsedBody = ProductInvoiceQueueIssueResource.safeParse(body);
     if (!parsedBody.success) {
       return NextResponse.json({ error: "Invalid request body", details: parsedBody.error.format() }, { status: 400 });
     }
