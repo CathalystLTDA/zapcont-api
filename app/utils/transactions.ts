@@ -1,4 +1,4 @@
-// utils/transactions.ts
+// TODO: Adjust functions to use a database 
 
 type Transaction = {
     id: string;
