@@ -20,6 +20,36 @@ model BotResponse {
   Message      Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
 }
 
+model Companies {
+  id           String    @id @default(cuid()) // Identificador único
+  cnpj         String    @unique // CNPJ da empresa
+  nomeFantasia String? // Nome fantasia da empresa
+  razaoSocial  String // Razão social da empresa
+  telefone     String? // Telefone de contato
+  email        String? // E-mail de contato
+  endereco     String? // Endereço da empresa
+  bairro       String?
+  cidade       String?
+  estado       String?
+  cep          String?
+  createdAt    DateTime  @default(now()) // Data de criação do registro
+  updatedAt    DateTime  @updatedAt // Atualizado automaticamente quando houver mudanças
+  chatId       String // ID do chat associado
+  user         UserState @relation(fields: [chatId], references: [chatId]) // Relação com o modelo User
+}
+
+model UserInfo {
+  id             Int       @id @default(autoincrement())
+  nome           String
+  cpf            String    @unique
+  dataNascimento DateTime
+  email          String    @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  chatId         String    @unique
+  user           UserState @relation(fields: [chatId], references: [chatId])
+}
+
 model Feedback {
   feedbackId     String   @id
   username       String?
@@ -54,13 +84,24 @@ model UserState {
   threadId      String?
   acceptedTerms Boolean       @default(false)
   BotResponse   BotResponse[]
+  Companies     Companies[]
   Message       Message[]
+  Transiction   Transaction[]
+  UserInfo      UserInfo?
 }
 
-model whatsapp_sessions {
-  id         Int      @id @default(autoincrement())
-  session_id String   @unique
-  data       String
-  created_at DateTime @db.Timestamptz(6)
-  updated_at DateTime @db.Timestamptz(6)
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  chatId      String
+  type        TransactionType
+  amount      Float
+  description String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  UserState   UserState       @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
 }

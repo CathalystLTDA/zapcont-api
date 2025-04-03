@@ -1,56 +1,49 @@
-// TODO: Adjust functions to use a database 
+import { TransactionType } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
-type Transaction = {
-    id: string;
-    type: 'income' | 'expense';
-    amount: number;
-    description: string;
-    date: string;
-};
+const prisma = new PrismaClient();
 
-let transactions: Transaction[] = [];
+export async function registerTransaction(
+    amount: number,
+    description: string,
+    type: TransactionType,
+    chatId: string
+) {
+    const newTransaction = await prisma.transaction.create({
+        data: {
+            chatId,
+            amount,
+            description,
+            type,
+        },
+    });
 
-// Registrar receita
-export function registerIncome(amount: number, description: string) {
-    const transaction: Transaction = {
-        id: crypto.randomUUID(),
-        type: 'income',
-        amount,
-        description,
-        date: new Date().toISOString(),
-    };
-    transactions.push(transaction);
-    return transaction;
+    return newTransaction;
 }
 
-// Registrar despesa
-export function registerExpense(amount: number, description: string) {
-    const transaction: Transaction = {
-        id: crypto.randomUUID(),
-        type: 'expense',
-        amount,
-        description,
-        date: new Date().toISOString(),
-    };
-    transactions.push(transaction);
-    return transaction;
-}
 
 // Retificar lançamento (editar)
-export function editTransaction(id: string, newData: Partial<Transaction>) {
-    const index = transactions.findIndex(t => t.id === id);
-    if (index !== -1) {
-        transactions[index] = { ...transactions[index], ...newData };
-        return transactions[index];
-    }
-    return null;
+export async function updateTransaction(
+    id: string,
+    amount?: number,
+    description?: string,
+    type?: TransactionType
+) {
+    const updatedTransaction = await prisma.transaction.update({
+        where: { id },
+        data: {
+            amount,
+            description,
+            type,
+        },
+    });
+
+    return updatedTransaction;
 }
 
 // Excluir lançamento
 export function deleteTransaction(id: string) {
-    const index = transactions.findIndex(t => t.id === id);
-    if (index !== -1) {
-        return transactions.splice(index, 1)[0];
-    }
-    return null;
+    return prisma.transaction.delete({
+        where: { id },
+    });
 }
