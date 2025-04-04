@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 // app/api/health/route.ts
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
@@ -16,6 +16,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   let dbConnectionHealthy = false;
+  
   try {
     // Attempt to connect to the database using Prisma.
     await connectToDatabase();

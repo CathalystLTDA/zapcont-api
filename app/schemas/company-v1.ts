@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const createCompanySchema = z.object({
+export const CompanyV1Schema = z.object({
     id: z.string().optional(),
     name: z.string(),
     tradeName: z.string().optional(),

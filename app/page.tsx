@@ -9,25 +9,43 @@ type HealthCheckResponse = {
   serverTime: string
 }
 
+type UserCountResponse = {
+  status: 'ok' | 'error'
+  count?: number
+  message?: string
+  timestamp: string
+}
+
 export default function Home() {
   const [healthData, setHealthData] = useState<HealthCheckResponse | null>(null)
+  const [userCountData, setUserCountData] = useState<UserCountResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    async function fetchHealth() {
+    async function fetchData() {
       try {
-        const res = await fetch('/api/health')
-        if (!res.ok) throw new Error('Failed to fetch health data')
-        const data = await res.json()
-        setHealthData(data)
+        // Fetch both health and user count data in parallel
+        const [healthRes, countRes] = await Promise.all([
+          fetch('/api/health'),
+          fetch('/api/users/count')
+        ])
+        
+        if (!healthRes.ok) throw new Error('Failed to fetch health data')
+        if (!countRes.ok) throw new Error('Failed to fetch user count data')
+        
+        const healthData = await healthRes.json()
+        const countData = await countRes.json()
+        
+        setHealthData(healthData)
+        setUserCountData(countData)
       } catch (err: any) {
         setError(err.message)
       } finally {
         setLoading(false)
       }
     }
-    fetchHealth()
+    fetchData()
   }, [])
 
   return (
@@ -49,7 +67,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-xl"
           >
-            Loading health data...
+            Loading system data...
           </motion.p>
         ) : error ? (
           <motion.p
@@ -92,14 +110,43 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="mb-2"
             >
               <span className="font-medium">Server Time:</span>{' '}
               {new Date(healthData.serverTime).toLocaleString()}
             </motion.div>
+            
+            {userCountData && userCountData.status === 'ok' && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+                className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+              >
+                <span className="font-medium">Registered Users:</span>{' '}
+                <span className="text-blue-600 dark:text-blue-400 font-semibold">
+                  {userCountData.count?.toLocaleString() || 0}
+                </span>
+              </motion.div>
+            )}
           </motion.div>
         ) : null}
       </main>
+      <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-xl p-4 max-w-md mx-auto mb-8">
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="bg-blue-600 dark:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-700 dark:hover:bg-blue-400 transition duration-300"
+          onClick={() => window.location.href = '/dashboard'}
+          whileTap={{ scale: 0.95 }}
+          whileFocus={{ scale: 1.05 }}
+        >
+          Acessar o Painel
+        </motion.button>
+      </div>
     </div>
   )
 }

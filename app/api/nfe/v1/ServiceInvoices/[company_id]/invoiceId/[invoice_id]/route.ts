@@ -1,29 +1,20 @@
-import { ServiceSchema } from "@/app/schemas/service";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NFEIO_V1_API_URL; // URL da API
 const API_KEY = process.env.NFEIO_API_KEY; // Chave da API
 
-export async function POST(req: NextRequest, context: { params: Promise<{ company_id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ company_id: string, invoice_id: string }> }) {
   try {
     // Pegando o company_id diretamente do context.params
-    const { company_id } = await context.params;
+    const { company_id, invoice_id } = await context.params;
 
-    const body = await req.json();
-
-    const parsedBody = ServiceSchema.safeParse(body);
-    if (!parsedBody.success) {
-      return NextResponse.json({ error: "Invalid request body", details: parsedBody.error.format() }, { status: 400 });
-    }
-
-    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices`, {
-      method: "POST",
+    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices/${invoice_id}`, {
+      method: "GET",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": `Bearer ${API_KEY}`,
       },
-      body: JSON.stringify(parsedBody.data),
     });
 
     const data = await response.json();
@@ -38,17 +29,20 @@ export async function POST(req: NextRequest, context: { params: Promise<{ compan
   }
 }
 
-export async function GET(req: NextRequest, context: { params: Promise<{ company_id: string }> }) {
+// PUT - Enviar email da nota fiscal
+export async function PUT(req: NextRequest, context: { params: Promise<{ company_id: string, invoice_id: string }> }) {
   try {
-    const { company_id } = await context.params;
+    const { company_id, invoice_id } = await context.params;
+    const body = await req.json();
 
-    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices`, {
-      method: "GET",
+    const response = await fetch(`${API_URL}/companies/${company_id}/serviceinvoices/${invoice_id}/sendemail`, {
+      method: "PUT",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": `Bearer ${API_KEY}`,
       },
+      body: JSON.stringify(body),
     });
 
     const data = await response.json();
