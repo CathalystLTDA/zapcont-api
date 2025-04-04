@@ -2,43 +2,28 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function getUserInfoByChatId(chatId: string) {
+export async function getUserInfoByChatId(chatId: string) {
   const userInfo = await prisma.userInfo.findUnique({
     where: { chatId },
   });
-  return Boolean(companyExists);
+
+  if (!userInfo) {
+    throw new Error('User not found');
+  }
+
+  return userInfo;
 }
 
-interface CreateCompanyInput {
-  cnpj: string;
-  chatId: string;
-  nomeFantasia: string;
-  razaoSocial: string;
-  telefone: string;
-  email: string;
-  endereco: string;
-  cidade: string;
-  bairro: string;
-  estado: string;
-  cep: string;
-}
-
-export async function createCompany({
-  cnpj,
-  chatId,
-  nomeFantasia,
-  razaoSocial,
-  telefone,
-  email,
-  endereco,
-  cidade,
-  bairro,
-  estado,
-  cep
-}: CreateCompanyInput) {
-  const companyExists = await checkCompanyExists(cnpj);
-  if (companyExists) {
-    throw new Error('Company already exists');
+export async function registerUserInfo(
+  chatId: string,
+  nome: string,
+  cpf: string,
+  dataNascimento: string,
+  email: string,
+) {
+  const userExists = await checkUserInfoExists(chatId);
+  if (userExists) {
+    throw new Error('User already exists');
   }
 
   const user = await prisma.userInfo.create({
@@ -56,8 +41,8 @@ export async function createCompany({
   return user;
 }
 
-async function updateUser(chatId: string, updates: Partial<{ nome: string; cpf: string; dataNascimento: string; email: string }>) {
-  const user = await prisma.userState.update({
+export async function updateUserInfo(chatId: string, updates: Partial<{ nome: string; cpf: string; dataNascimento: string; email: string }>) {
+  const user = await prisma.userInfo.update({
     where: { chatId },
     data: {
       ...updates,
@@ -68,15 +53,15 @@ async function updateUser(chatId: string, updates: Partial<{ nome: string; cpf: 
   return user;
 }
 
-async function deleteUser(chatId: string) {
-  await prisma.userState.delete({
+export async function deleteUserInfo(chatId: string) {
+  await prisma.userInfo.delete({
     where: { chatId },
   });
 
   return { message: 'User deleted successfully' };
 }
 
-async function checkUserExists(chatId: string): Promise<boolean> {
-  const user = await prisma.userState.findUnique({ where: { chatId } });
+export async function checkUserInfoExists(chatId: string): Promise<boolean> {
+  const user = await prisma.userInfo.findUnique({ where: { chatId } });
   return !!user;
 }
