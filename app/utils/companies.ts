@@ -83,3 +83,20 @@ export async function getCompanyByChatId(chatId: string) {
 
   return company;
 }
+
+export async function updateCompany(cnpj: string, updates: Partial<CreateCompanyInput>) {
+  const company = await prisma.companies.update({
+    where: { cnpj },
+    data: {
+      ...updates,
+      updatedAt: new Date(),
+    },
+  });
+
+  return company;
+}
+export async function deleteCompany(cnpj: string) {
+  await prisma.companies.delete({
+    where: { cnpj },
+  });
+}

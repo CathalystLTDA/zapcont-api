@@ -2,9 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function checkCompanyExists(cnpj: string): Promise<boolean> {
-  const companyExists = await prisma.companies.findUnique({
-    where: { cnpj },
+async function getUserInfoByChatId(chatId: string) {
+  const userInfo = await prisma.userInfo.findUnique({
+    where: { chatId },
   });
   return Boolean(companyExists);
 }
@@ -41,45 +41,42 @@ export async function createCompany({
     throw new Error('Company already exists');
   }
 
-  return await prisma.companies.create({
+  const user = await prisma.userInfo.create({
     data: {
-      cnpj,
       chatId,
-      nomeFantasia,
-      razaoSocial,
-      telefone,
+      nome,
+      cpf,
+      dataNascimento,
       email,
-      endereco,
-      cidade,
-      estado,
-      bairro,
-      cep,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   });
+
+  return user;
 }
 
-export async function getCompanyByCNPJ(cnpj: string) {
-  const company = await prisma.companies.findUnique({
-    where: { cnpj },
+async function updateUser(chatId: string, updates: Partial<{ nome: string; cpf: string; dataNascimento: string; email: string }>) {
+  const user = await prisma.userState.update({
+    where: { chatId },
+    data: {
+      ...updates,
+      updatedAt: new Date(),
+    },
   });
 
-  if (!company) {
-    throw new Error('Company not found');
-  }
-
-  return company;
+  return user;
 }
 
-export async function getCompanyByChatId(chatId: string) {
-  const company = await prisma.companies.findMany({
+async function deleteUser(chatId: string) {
+  await prisma.userState.delete({
     where: { chatId },
   });
 
-  if (!company.length) {
-    throw new Error('Company not found');
-  }
+  return { message: 'User deleted successfully' };
+}
 
-  return company;
+async function checkUserExists(chatId: string): Promise<boolean> {
+  const user = await prisma.userState.findUnique({ where: { chatId } });
+  return !!user;
 }
