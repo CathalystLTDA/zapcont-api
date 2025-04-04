@@ -12,29 +12,29 @@ export async function checkCompanyExists(cnpj: string): Promise<boolean> {
 interface CreateCompanyInput {
   cnpj: string;
   chatId: string;
-  nomeFantasia?: string;
-  razaoSocial?: string;
-  telefone?: string;
-  email?: string;
-  endereco?: string;
-  cidade?: string;
-  bairro?: string;
-  estado?: string;
-  cep?: string;
+  nomeFantasia: string;
+  razaoSocial: string;
+  telefone: string;
+  email: string;
+  endereco: string;
+  cidade: string;
+  bairro: string;
+  estado: string;
+  cep: string;
 }
 
 export async function createCompany({
   cnpj,
   chatId,
-  nomeFantasia = 'teste',
-  razaoSocial = 'teste',
-  telefone = 'teste',
-  email = 'teste',
-  endereco = 'teste',
-  cidade = 'teste',
-  bairro = 'teste',
-  estado = 'teste',
-  cep = 'teste',
+  nomeFantasia,
+  razaoSocial,
+  telefone,
+  email,
+  endereco,
+  cidade,
+  bairro,
+  estado,
+  cep
 }: CreateCompanyInput) {
   const companyExists = await checkCompanyExists(cnpj);
   if (companyExists) {
