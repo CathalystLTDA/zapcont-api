@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 // app/api/users/count/route.ts
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     
     // Count users (using UserState as the user model)
     const userCount = await prisma.userState.count();
+    console.log('User count:', userCount);
     
     // Build the success response payload
     const payload = {

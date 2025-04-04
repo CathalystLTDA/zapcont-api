@@ -235,7 +235,7 @@ export default function Dashboard() {
               </svg>
             </button>
             <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center text-blue-600 font-semibold">
-              GZ
+              SJ
             </div>
           </div>
         </header>
