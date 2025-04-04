@@ -54,13 +54,54 @@ model UserState {
   threadId      String?
   acceptedTerms Boolean       @default(false)
   BotResponse   BotResponse[]
+  Companies     Companies[]
   Message       Message[]
+  Transaction   Transaction[]
+  UserInfo      UserInfo?
 }
 
-model whatsapp_sessions {
-  id         Int      @id @default(autoincrement())
-  session_id String   @unique
-  data       String
-  created_at DateTime @db.Timestamptz(6)
-  updated_at DateTime @db.Timestamptz(6)
+model Companies {
+  id           String    @id
+  cnpj         String    @unique
+  nomeFantasia String?
+  razaoSocial  String
+  telefone     String?
+  email        String?
+  endereco     String?
+  bairro       String?
+  cidade       String?
+  estado       String?
+  cep          String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+  chatId       String
+  UserState    UserState @relation(fields: [chatId], references: [chatId])
+}
+
+model Transaction {
+  id          String          @id
+  chatId      String
+  amount      Float
+  description String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime
+  type        TransactionType
+  UserState   UserState       @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+}
+
+model UserInfo {
+  id             Int       @id @default(autoincrement())
+  nome           String
+  cpf            String    @unique
+  dataNascimento DateTime
+  email          String    @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime
+  chatId         String    @unique
+  UserState      UserState @relation(fields: [chatId], references: [chatId])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }
