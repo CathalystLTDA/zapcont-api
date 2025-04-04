@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { checkUserExists } from './user';
 
 const prisma = new PrismaClient();
 
@@ -21,8 +22,9 @@ export async function registerUserInfo(
   dataNascimento: string,
   email: string,
 ) {
-  const userExists = await checkUserInfoExists(chatId);
-  if (userExists) {
+  const userInfoExists = await checkUserInfoExists(chatId);
+  console.log('userInfoExists', userInfoExists);
+  if (userInfoExists) {
     throw new Error('User already exists');
   }
 
@@ -63,5 +65,5 @@ export async function deleteUserInfo(chatId: string) {
 
 export async function checkUserInfoExists(chatId: string): Promise<boolean> {
   const user = await prisma.userInfo.findUnique({ where: { chatId } });
-  return !!user;
+  return user !== null;
 }

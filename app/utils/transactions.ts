@@ -24,13 +24,13 @@ export async function registerTransaction(
 
 // Retificar lançamento (editar)
 export async function updateTransaction(
-    id: string,
+    transactionId: string,
     amount?: number,
     description?: string,
     type?: TransactionType
 ) {
     const updatedTransaction = await prisma.transaction.update({
-        where: { id },
+        where: { id: transactionId },
         data: {
             amount,
             description,
