@@ -665,12 +665,12 @@ export default function Dashboard() {
               animate={{ opacity: 1 }}
               className="space-y-6"
             >
-              <h2 className="text-xl font-semibold mb-4">System Health Details</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">System Health Details</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                    <h3 className="font-medium text-gray-700 mb-2">Database Connection</h3>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Database Connection</h3>
                     <div className="flex items-center">
                       <div className={`w-4 h-4 rounded-full mr-2 ${healthData?.dbConnection ? 'bg-green-500' : 'bg-red-500'}`}></div>
                       <span className={healthData?.dbConnection ? 'text-green-600' : 'text-red-600'}>
@@ -680,11 +680,11 @@ export default function Dashboard() {
                   </div>
                   
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="font-medium text-gray-700 mb-2">Server Information</h3>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Server Information</h3>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Server Time:</span>
-                        <span className="font-medium">{new Date(healthData?.serverTime || '').toLocaleString()}</span>
+                        <span className="font-medium text-gray-600">{new Date(healthData?.serverTime || '').toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Status:</span>
