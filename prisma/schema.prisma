@@ -61,7 +61,7 @@ model UserState {
 }
 
 model Companies {
-  id           String    @id
+  id           String    @id @default(cuid())
   cnpj         String    @unique
   nomeFantasia String?
   razaoSocial  String
